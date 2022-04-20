@@ -1,7 +1,15 @@
 const { studentModel } = require('../model/model')
+const validate = require('../validate')
 
 const postStudent = async (req, res) =>{
     try {
+        const {error} = validate.studentConstraint(req.body)
+        if(error){
+            res.status(409).json({
+                status: `Fail`,
+                message: error.details[0].message
+            })
+        }
 
         const data={
             name: req.body.name,
