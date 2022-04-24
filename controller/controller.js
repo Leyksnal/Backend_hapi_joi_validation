@@ -1,6 +1,8 @@
 const { studentModel } = require('../model/model')
 const validate = require('../validate')
 
+
+// Posting to the database
 const postStudent = async (req, res) =>{
     try {
         const {error} = validate.studentConstraint(req.body)
@@ -32,6 +34,7 @@ const postStudent = async (req, res) =>{
     }
 }
 
+// Get all from the database
 const getAllStudent = async (req, res) =>{
     try {
 
@@ -50,7 +53,54 @@ const getAllStudent = async (req, res) =>{
     }
 }
 
+// Get one document from the database
+const getStudent = async (req, res) =>{
+    try {
+        
+        const student = await studentModel.findById( req.params.id )
+        res.status(200).json({
+            status: `One student`,
+            data: {
+                student
+            }
+        })
+    } catch (error) {
+        res.status(404).json({
+            status: `Failed`,
+            message: error.message
+        })
+    }
+}
+
+// Update one document from the database
+const updateStudent = async (req, res) =>{
+    try {
+        
+        const {error} = validate.studentConstraint(req.body)
+        if(error){
+            res.status(409).json({
+                status: `Fail`,
+                message: error.details[0].message
+            })
+        }
+        const student = await studentModel.findByIdAndUpdate( req.params.id, req.body, {new: true} )
+        res.status(200).json({
+            status: `One student updated`,
+            data: {
+                student
+            }
+        })
+    } catch (error) {
+        res.status(404).json({
+            status: `Failed`,
+            message: error.message
+        })
+    }
+}
+
 module.exports ={
     postStudent,
-    getAllStudent
+    getAllStudent,
+    getStudent,
+    updateStudent
 }

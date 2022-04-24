@@ -5,19 +5,17 @@ const Schema = mongoose.Schema
 const studentShape = new Schema({
     name:{
         type: String,
-        required: true
+        unique: true
     },
     college:{
         type: String,
-        required: true
     },
     course:{
         type: String,
-        required: true
     }
 })
 
-const studentModel = mongoose.model("StudentValidation", studentShape)
+const studentModel = mongoose.model("hapijoivalidation", studentShape)
 module.exports = {
     studentModel
 }
